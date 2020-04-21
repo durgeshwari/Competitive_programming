@@ -1,0 +1,47 @@
+class UndergroundSystem {
+public:
+    map<string,vector<pair< int,int> > > mp;
+    
+    UndergroundSystem() {
+        mp.clear();
+    }
+    
+    void checkIn(int id, string stationName, int t) {
+        mp[stationName].emplace_back(id,t);
+    }
+    
+    void checkOut(int id, string stationName, int t) {
+        mp[stationName].emplace_back(id,t);
+    }
+    
+    double getAverageTime(string startStation, string endStation) {
+        
+        vector< pair<int,int> > strt=mp[startStation];
+        vector< pair<int,int> > end=mp[endStation];
+        int sum=0,c=0;
+        
+        for(auto it:strt)
+        {
+            for(auto it2:end)  
+            {
+                if(it.first==it2.first)
+                {
+                    sum+=(it2.second-it.second);
+                    c++;
+                }
+            }
+        }
+        
+        double ans=(sum*1.0)/c;
+        
+        return ans;
+    }
+};
+
+/**
+ * Your UndergroundSystem object will be instantiated and called as such:
+ * UndergroundSystem* obj = new UndergroundSystem();
+ * obj->checkIn(id,stationName,t);
+ * obj->checkOut(id,stationName,t);
+ * double param_3 = obj->getAverageTime(startStation,endStation);
+ */
