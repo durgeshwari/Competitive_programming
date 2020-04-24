@@ -1,0 +1,83 @@
+/*LRUCache cache = new LRUCache( 2 /* capacity */ );
+
+cache.put(1, 1);
+cache.put(2, 2);
+cache.get(1);       // returns 1
+cache.put(3, 3);    // evicts key 2
+cache.get(2);       // returns -1 (not found)
+cache.put(4, 4);    // evicts key 1
+cache.get(1);       // returns -1 (not found)
+cache.get(3);       // returns 3
+cache.get(4);       // returns 4
+*/
+
+class LRUCache {
+public:
+//we dont use array because deleting an element is diff in O(1),same goes with linked list;
+// but with doubly linked list it is quite possible to delete in O(1);
+// and for binary tree we'll have to make lot of searching;
+//  so the best is hash table with doubly linked list or a map with list
+//ref - https://www.youtube.com/watch?v=S6IfqDXWa10
+    
+    int max_cap;
+    list<pair<int,int>> lst;
+    unordered_map<int, list<pair<int,int>> ::iterator > mp;
+    
+    LRUCache(int capacity) {
+        max_cap=capacity;
+        
+    }
+    
+    int get(int key) {
+        if(mp.find(key) == mp.end())
+            return -1;
+        else
+        {
+            auto it=mp[key];
+            int val = it->second;
+            lst.erase(it);
+            
+            //if we have the key in the list..then erase the element from map and add to the front..since it is most recently used
+            
+            lst.push_front({key,val});
+            mp[key]=lst.begin();
+            
+            return val;
+            
+        }
+        
+    }
+    
+    void put(int key, int value) {
+        
+        if(mp.find(key) == mp.end())
+        {
+            if(mp.size()==max_cap)
+            {
+                auto ext=lst.rbegin();
+                mp.erase(ext->first);
+                lst.pop_back();
+                //if key is no present ans the capacity exceeds..pop the last item in the list
+                
+            }
+        }
+        else
+        {
+            auto it=mp[key];
+            lst.erase(it);
+            //erasing the value from the list..if the key is already present
+        }
+        
+        lst.push_front({key,value});
+        mp[key]=lst.begin();
+        //add the element in list and push it in map
+        
+    }
+};
+
+/**
+ * Your LRUCache object will be instantiated and called as such:
+ * LRUCache* obj = new LRUCache(capacity);
+ * int param_1 = obj->get(key);
+ * obj->put(key,value);
+ */
