@@ -1,0 +1,71 @@
+/*Input: 
+["FirstUnique","showFirstUnique","add","add","add","add","add","showFirstUnique"]
+[[[7,7,7,7,7,7]],[],[7],[3],[3],[7],[17],[]]
+Output: 
+[null,-1,null,null,null,null,null,17]
+
+Explanation: 
+FirstUnique firstUnique = new FirstUnique([7,7,7,7,7,7]);
+firstUnique.showFirstUnique(); // return -1
+firstUnique.add(7);            // the queue is now [7,7,7,7,7,7,7]
+firstUnique.add(3);            // the queue is now [7,7,7,7,7,7,7,3]
+firstUnique.add(3);            // the queue is now [7,7,7,7,7,7,7,3,3]
+firstUnique.add(7);            // the queue is now [7,7,7,7,7,7,7,3,3,7]
+firstUnique.add(17);           // the queue is now [7,7,7,7,7,7,7,3,3,7,17]
+firstUnique.showFirstUnique(); // return 17
+*/
+
+class FirstUnique {
+public:
+    
+//     https://www.youtube.com/watch?v=eky43Oe8qLI
+    
+    list<int> unique;
+    unordered_map<int, list<int>::iterator> pos; 
+ //hashmap of pointer storing the position of of element inserted in list along with the value
+    
+    FirstUnique(vector<int>& nums) {
+        
+        for(int n : nums)
+        {
+            add(n);
+        }        
+    }
+    
+    int showFirstUnique() {
+        if(unique.size())
+        {
+           return unique.front();
+        }
+        return -1;
+    }
+    
+    void add(int value) {
+       
+        if(pos.find(value) != pos.end())   //key is present
+        {
+            list<int>::iterator it=pos[value];
+            if(it != unique.end())  //key is in the list
+            {
+                unique.erase(it);
+                pos[value]=unique.end();
+            }
+           
+        }
+        else    //key occurs for the first time
+        {
+            unique.push_back(value);
+            list<int>::iterator it=unique.end();        //inserted at the end of list
+            it--;
+            pos[value]=it;      //corresponding position is added to the map
+        }
+            
+    }
+};
+
+/**
+ * Your FirstUnique object will be instantiated and called as such:
+ * FirstUnique* obj = new FirstUnique(nums);
+ * int param_1 = obj->showFirstUnique();
+ * obj->add(value);
+ */
