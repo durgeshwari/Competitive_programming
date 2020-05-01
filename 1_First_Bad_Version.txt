@@ -1,0 +1,39 @@
+// https://leetcode.com/explore/featured/card/may-leetcoding-challenge/534/week-1-may-1st-may-7th/3316/
+/*Example:
+
+Given n = 5, and version = 4 is the first bad version.
+
+call isBadVersion(3) -> false
+call isBadVersion(5) -> true
+call isBadVersion(4) -> true
+
+Then 4 is the first bad version. */
+
+// The API isBadVersion is defined for you.
+// bool isBadVersion(int version);
+
+class Solution {
+public:
+    int firstBadVersion(int n) {
+        
+        int l=1,h=n,m;
+        
+        while(l<=h)
+        {
+            m=l+(h-l)/2;
+            bool x=isBadVersion(m);
+            if(x && m>1 && !isBadVersion(m-1))
+                return m;
+            if(x)
+            {
+                h=m-1;
+            }
+            else{
+                l=m+1;
+            }
+            
+        }
+        
+        return 1;
+    }
+};
