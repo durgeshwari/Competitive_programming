@@ -1,0 +1,18 @@
+   //Given a positive integer, output its complement number. The complement strategy is to flip the bits of its //binary representation.
+    /*Input: 5
+    Output: 2
+    Explanation: The binary representation of 5 is 101 (no leading zero bits), and its complement is 010. So you    need to output 2.
+    */
+    int findComplement(int num) {
+        
+        long int n=1,ans=0;
+        
+        while(n<=num)
+        {
+            if( (n&num) ==0)
+                ans+=n;
+            n*=2;
+        }
+        
+        return ans;
+    }
