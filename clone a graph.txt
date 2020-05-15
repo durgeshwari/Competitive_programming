@@ -1,0 +1,115 @@
+/*
+Given a reference of a node in a connected undirected graph.
+
+Return a deep copy (clone) of the graph.
+
+Each node in the graph contains a val (int) and a list (List[Node]) of its neighbors.
+
+// Definition for a Node.
+class Node {
+public:
+    int val;
+    vector<Node*> neighbors;
+    
+    Node() {
+        val = 0;
+        neighbors = vector<Node*>();
+    }
+    
+    Node(int _val) {
+        val = _val;
+        neighbors = vector<Node*>();
+    }
+    
+    Node(int _val, vector<Node*> _neighbors) {
+        val = _val;
+        neighbors = _neighbors;
+    }
+};
+*/
+
+//dfs 1
+class Solution {
+public:
+    Node* cloneGraph(Node* node) {
+        
+        if(!node)
+            return NULL;
+        
+        unordered_map<int,Node*> vis;
+        
+        return clone(node,vis);
+    }
+    
+    Node* clone(Node* node,unordered_map<int,Node*>& vis)
+    {
+        Node* nn=new Node(node->val);
+        // cout<<node->val<<" ";
+        vis.insert({node->val,nn});
+        for(Node* neigh:node->neighbors)
+        {
+            auto it=vis.find(neigh->val);
+            if(it == vis.end())   //not present in map
+            {
+                Node* cn=clone(neigh,vis);
+                nn->neighbors.push_back(cn);
+            }
+            else
+            {
+                nn->neighbors.push_back(it->second); //push the node into the neighbours of the nn if it is already present in map
+            }
+        }
+        
+        return nn;
+    }
+};
+
+
+//dfs 2
+
+class Solution {
+    unordered_map<Node*, Node*> vis;
+public:
+    Node* cloneGraph(Node* node) {
+        if (!node) {
+            return NULL;
+        }
+        if (vis.find(node) == vis.end()) {
+            vis[node] = new Node(node -> val, {});
+            for (Node* neigh : node -> neighbors) {
+                vis[node] -> neighbors.push_back(cloneGraph(neigh));
+            }
+        }
+        return vis[node];
+    }
+};
+
+
+// bfs
+
+class Solution {
+    unordered_map<Node*, Node*> vis;
+public:
+    Node* cloneGraph(Node* node) {
+        
+       if (!node) {
+            return NULL;
+        }
+        Node* new_node = new Node(node -> val, {});
+        vis[node] = new_node;
+        queue<Node*> q;
+        q.push(node);
+        while (!q.empty()) {
+            Node* cur = q.front();
+            q.pop();
+            for (Node* neigh : cur -> neighbors) {
+                if (vis.find(neigh) == vis.end()) {
+                    vis[neigh] = new Node(neigh -> val, {});
+                    q.push(neigh);
+                }
+                vis[cur] -> neighbors.push_back(vis[neigh]);
+            }
+        }
+        return new_node;
+    }
+};
