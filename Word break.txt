@@ -1,0 +1,39 @@
+/*Given a non-empty string s and a dictionary wordDict containing a list of non-empty words, determine if s can be segmented into a space-separated sequence of one or more dictionary words.
+
+Note:
+The same word in the dictionary may be reused multiple times in the segmentation.
+You may assume the dictionary does not contain duplicate words.
+Example 1:
+Input: s = "leetcode", wordDict = ["leet", "code"]
+Output: true
+Explanation: Return true because "leetcode" can be segmented as "leet code".*/
+
+
+class Solution {
+public:
+    bool wordBreak(string s, vector<string>& wordDict) {
+     
+        int n=s.length();
+        bool isWordBreak[n+1];
+        memset(isWordBreak,false,sizeof isWordBreak);
+        isWordBreak[0]=true;
+        
+        for(int j=0;j<=n;j++)
+        {
+            if(!isWordBreak[j])
+                continue;
+
+            for(auto w:wordDict)
+            {
+                int i=j+w.length();
+                if(i<=n && s.substr(j,w.length())==w)
+                {
+                    isWordBreak[i]=true;
+                }   
+                
+            }
+        }
+        
+        return isWordBreak[n];
+    }
+};
