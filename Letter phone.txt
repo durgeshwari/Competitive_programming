@@ -1,0 +1,41 @@
+Given a digit string, return all possible letter combinations that the number could represent.
+ 
+A mapping of digit to letters (just like on the telephone buttons) is given below.
+The digit 0 maps to 0 itself.
+The digit 1 maps to 1 itself.
+ 
+/*
+    s-> 432->234
+    map[9]->{vals}
+    {abc}{def}{ghi}
+    {ad,ae,af,bd,be,bf,cd,ce,cf}{g,h,i}
+*/
+ 
+vector<string> ans;
+string val[10]={"0","1","abc","def","ghi","jkl","mno","pqrs","tuv","wxyz"};
+ 
+void rec(string A,int n,int m,string temp)
+{
+    if(m==n)
+    {
+        ans.push_back(temp);
+        return;
+    }
+    
+    string v=val[A[m]-'0'];
+    for(int i=0;i<v.length();i++)
+    {
+        temp+=v[i];
+        rec(A,n,m+1,temp);
+        temp.pop_back();
+    }
+}
+ 
+vector<string> Solution::letterCombinations(string A) {
+    
+    ans.clear();
+    int n=A.size();
+    rec(A,n,0,"");
+    
+    return ans;
+}
