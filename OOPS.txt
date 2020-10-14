@@ -1,0 +1,186 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+//class
+class laptop
+{
+private:	//access specifier-private :so data hiding
+	string name,brand;	
+	float price;
+public:
+		
+//default constructor : automatically gets called
+	laptop()
+	{
+		name="..base.. ";
+		cout<<"constructor of base class 1 "<<endl;
+	}
+//constructor overloading 
+//parameterised constructor
+	laptop(float pr)
+	{
+		price=pr;	//initialise
+		cout<<"parameterised constructor called "<<endl;
+	}
+//copy constructor
+	laptop(const laptop& l3)
+	{
+		cout<<"copy constructor called for "<<l3.price<<endl;
+	}
+	
+//operator overloading
+	laptop operator + (laptop const& l5)
+	{
+		laptop temp;
+		temp.price=price+l5.price;
+		return temp;
+	}
+	
+//destructor
+	~laptop()
+	{
+		cout<<"destructor"<<endl;
+	}
+	
+	void getdata()
+	{
+		cin>>name>>brand>>price;
+	}
+	void setdata()
+	{
+		cout<<name<<" "<<brand<<" "<<price<<endl;
+	}
+	
+//virtual keyword for runtime polymorphism
+	virtual void print() 
+    { 
+        cout << "print base class" << endl; 
+    } 
+    void show() 
+    { 
+        cout << "show base class" << endl; 
+    } 
+    
+//function overloading
+	void funOverloading()
+	{
+		cout<<"fun1 is runnig"<<endl;
+	}
+	void funOverloading(int x)
+	{
+		cout<<"fun "<<x<<" is runnig"<<endl;
+	}
+	
+	
+	friend class gadget; //friend class
+};
+
+//Single Inheritance
+class gaming: public laptop
+{
+	string name;
+	int ram;
+public:
+	
+	gaming()	
+	{
+		cout<<"derived from laptop"<<endl;
+	}
+	
+	void print() 
+    { 
+        cout << "print derived class" << endl; 
+    } 
+  
+    void show() 
+    { 
+        cout << "show derived class" << endl; 
+    } 
+};
+
+class gadget
+{
+	public:
+		
+//default constructor : automatically gets called
+	gadget()
+	{
+		cout<<"constructor of base class 2 "<<endl;
+	}	
+	
+	void show(laptop& nm)	// Since gadget is friend of laptop, it can access private members of laptop
+	{
+		cout<<nm.name<<endl;
+	}
+	
+};
+
+//Multiple Inheritance
+class gaming_multi:public laptop,public gadget
+{
+	string name;
+	int ram;
+	public:
+	
+	gaming_multi()	
+	{
+		cout<<"derived from laptop and gadget"<<endl;
+	}
+};
+
+
+//multilevel Inheritance
+class graphics:public gaming
+{
+	public:
+	string name;
+	int ram;
+	graphics()	
+	{
+		cout<<"derived from gaming"<<endl;
+	}
+};
+
+
+int main()
+{
+//object
+	laptop l1;
+//	laptop l2(67.8),l5(45.7);	//parameterised
+//	laptop l3=l2;		//copy constructor
+	
+//	l1.getdata();		//encapsulation,since name,price etc can be accessed only using get set function 
+//	l1.setdata();
+	
+//compile time Polymorphism
+//operator overloading
+//	laptop l4=l2+l5;	//treated as l4=l2.add(l5);
+//	l4.setdata();
+
+//function overloading
+//	l1.funOverloading();
+//	l1.funOverloading(5);
+
+/*Runtime polymorphism*/
+	laptop *lptr;
+	gaming gder;
+	lptr=&gder;
+//or
+//	laptop *lptr=new gaming;	
+	
+	lptr->print();	//virtual,so points to derived class member funtion
+	lptr->show();	//not virtual,so prints base class member function
+
+//friend class
+	gadget frnd;
+	frnd.show(l1);
+	
+//	gaming g1;			//single inheritance
+//	graphics gr;		//multilevel inheritance
+//	gaming_multi gml;  //multiple inheritance
+	
+
+
+	return 0;
+}
+
